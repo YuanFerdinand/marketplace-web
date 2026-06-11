@@ -54,7 +54,15 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $users = $this->userRepository->getById($id);
+            if (!$users) {
+                return ResponseHelper::jsonResponse(false, 'Data User Tidak ditemukan', null, 404);
+            }
+            return ResponseHelper::jsonResponse(true, 'Data User Berhasil diambil', new UserResource($users), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 
     /**
